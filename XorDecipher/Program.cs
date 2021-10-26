@@ -9,36 +9,6 @@ namespace XorDecipher
 {
     internal class Program
     {
-        private static Dictionary<char, double> LetterFrequencies = new Dictionary<char, double>()
-        {
-            ['a'] = 0.082,
-            ['b'] = 0.015,
-            ['c'] = 0.028,
-            ['d'] = 0.043,
-            ['e'] = 0.13,
-            ['f'] = 0.022,
-            ['g'] = 0.02,
-            ['h'] = 0.061,
-            ['i'] = 0.07,
-            ['j'] = 0.0015,
-            ['k'] = 0.0077,
-            ['l'] = 0.04,
-            ['m'] = 0.024,
-            ['n'] = 0.067,
-            ['o'] = 0.075,
-            ['p'] = 0.019,
-            ['q'] = 0.00095,
-            ['r'] = 0.06,
-            ['s'] = 0.063,
-            ['t'] = 0.091,
-            ['u'] = 0.028,
-            ['v'] = 0.0098,
-            ['w'] = 0.024,
-            ['x'] = 0.0015,
-            ['y'] = 0.02,
-            ['z'] = 0.00074
-        };
-
         enum InputEncoding
         {
             PlainText,
@@ -106,10 +76,11 @@ namespace XorDecipher
             var columnsXorShifts = columns
                 .Select(col => GetAllXorShifts(col)
                 .OrderByDescending(shift =>
-                    GetRelativeFrequencyCorelation(shift.Value)).ToArray())
+                    FrequencyAnalysis.GetRelativeFrequencyCorelation(shift.Value)).ToArray())
                 .ToArray();
 
             var textXorShifts = new Dictionary<string, string>();
+
             var bestKey = new string(columnsXorShifts.Select(shifts => shifts.First().Key).ToArray());
             Console.WriteLine($"Best key guess: {bestKey}");
             var decodedText = XorEncodeDecode(input, bestKey);
@@ -128,29 +99,7 @@ namespace XorDecipher
             return result.ToString();
         }
 
-        private static double GetRelativeFrequencyCorelation(string text)
-        {
-            // does not work properly?
-            double relativeFrequencyCorelation = 0;
-            foreach (var charFrequency in GetCharFrequencies(text).OrderBy(c => c.Value))
-            {
-                var letterOccurs = LetterFrequencies.TryGetValue(charFrequency.Key, out double letterFrequency);
-                if (letterOccurs)
-                {
-                    relativeFrequencyCorelation += letterFrequency * charFrequency.Value;
-                }
-            }
-            return relativeFrequencyCorelation;
-        }
-
-        private static Dictionary<char, double> GetCharFrequencies(string text)
-        {
-            return text.Distinct()
-                .ToDictionary(c => c,
-                    c => text
-                         .Count(letter => letter == c)
-                         / (double)text.Length);
-        }
+        
 
         private static void IndexOfCoincidenceAnalysis(string input)
         {
@@ -191,7 +140,7 @@ namespace XorDecipher
         private static void BruteforceSingleByteXor(string input)
         {
             var output = GetAllXorShifts(input)
-                .OrderByDescending(shift => GetRelativeFrequencyCorelation(shift.Value));
+                .OrderByDescending(shift => FrequencyAnalysis.GetRelativeFrequencyCorelation(shift.Value));
             var bestGuess = output.First();
             Console.WriteLine($"Best guess (key = {bestGuess.Key}): {bestGuess.Value}");
             File.WriteAllText("output.txt", string.Join('\n', output.Select(kvp => $"KEY {kvp.Key}: {kvp.Value}")));
@@ -200,7 +149,7 @@ namespace XorDecipher
 
         private static void PrintCharFrequencies(string input)
         {
-            Dictionary<char, double> charFrequencies = GetCharFrequencies(input);
+            Dictionary<char, double> charFrequencies = FrequencyAnalysis.GetCharFrequencies(input);
             Console.WriteLine("Character frequencies: ");
             foreach (var pair in charFrequencies.OrderBy(kvp => kvp.Value))
             {

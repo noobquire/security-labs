@@ -1,5 +1,6 @@
 ﻿using SecurityLabs;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Numerics;
 using System.Text.Json;
@@ -12,42 +13,17 @@ namespace PseudoRandomDecoder
     {
         public static async Task Main()
         {
-            var invMod = ModInverse(-2301330659, 4294967296);
             var accountId = Utils.GetInt("account id");
-            var lcgRandom = new LcgRandom(361882959, 1664525, 1013904223);
-            for (int i = 0; i < 10; i++)
+            var numberOfValues = Utils.GetInt("number of values to retreive");
+            using var fs = File.OpenWrite("values.txt");
+            using var sw = new StreamWriter(fs);
+            for (int i = 0; i < numberOfValues; i++)
             {
-                Console.WriteLine(lcgRandom.Next());
+                var value = await GetMtValue(accountId);
+                Console.WriteLine(value);
+                sw.WriteLine(value);
             }
-
-            return;
-            while (true)
-            {
-                int[] lcg = new int[3];
-                for (int i = 0; i < lcg.Length; i++)
-                {
-                    lcg[i] = await GetLcgValue(accountId);
-                }
-
-                
-                try
-                {
-                    var expected = PredictLcg(lcg);
-                    var actual = await GetLcgValue(accountId);
-                    if (expected != actual)
-                    {
-                        continue;
-                    }
-                }
-                catch (DivideByZeroException)
-                {
-                    continue;
-                }
-
-
-                Console.WriteLine("Broke LCG values successfully!");
-                break;
-            }
+            Console.WriteLine($"Wrote {numberOfValues} pseudorandom values to values.txt");
         }
 
         private static int PredictLcg(int[] lcg)
@@ -62,7 +38,29 @@ namespace PseudoRandomDecoder
             return 42;
         }
 
-        private static async Task<int> GetLcgValue(int accountId)
+        private static async Task<long> GetMtValue(int accountId)
+        {
+            var builder = new UriBuilder("http://95.217.177.249/casino/playBetterMt/");
+            builder.Port = -1;
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query["id"] = accountId.ToString();
+            query["bet"] = "1";
+            query["number"] = "1";
+
+            builder.Query = query.ToString();
+            var client = new HttpClient();
+            client.BaseAddress = builder.Uri;
+
+
+            var response = await client.GetAsync("");
+            //response.EnsureSuccessStatusCode();
+            var reponseString = await response.Content.ReadAsStringAsync();
+            var casinoResponse = JsonSerializer.Deserialize<CasinoResponse>(reponseString);
+
+            return casinoResponse.realNumber;
+        }
+
+        private static async Task<long> GetLcgValue(int accountId)
         {
             var builder = new UriBuilder("http://95.217.177.249/casino/playLcg/");
             builder.Port = -1;
@@ -70,13 +68,14 @@ namespace PseudoRandomDecoder
             query["id"] = accountId.ToString();
             query["bet"] = "1";
             query["number"] = "1";
+            
             builder.Query = query.ToString();
             var client = new HttpClient();
             client.BaseAddress = builder.Uri;
+            
 
             var response = await client.GetAsync("");
             //response.EnsureSuccessStatusCode();
-
             var reponseString = await response.Content.ReadAsStringAsync();
             var casinoResponse = JsonSerializer.Deserialize<CasinoResponse>(reponseString);
 
