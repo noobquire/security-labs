@@ -62,15 +62,12 @@ namespace SecurityLabs
         /// </summary>
         /// <param name="text">Text.</param>
         /// <returns>Dictionary with relative frequency for each character.</returns>
-        public static Dictionary<char, double> GetCharFrequencies(string text)
-        {
-            return text
-                .ToLower()
+        public static Dictionary<char, double> GetCharFrequencies(string text) => text
+                .ToUpperInvariant()
                 .Distinct()
                 .ToDictionary(c => c,
-                    c => 1000 * text.ToLower()
+                    c => text.ToUpperInvariant()
                          .Count(letter => letter == c)
-                         / (double)text.Length);
-        }
+                         / (double) text.Length);
     }
 }

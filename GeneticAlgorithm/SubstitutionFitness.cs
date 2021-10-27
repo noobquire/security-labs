@@ -54,7 +54,7 @@ namespace GeneticAlgorithm
 
             foreach (var quadgram in quadgrams)
             {
-                if(QuadgramProbabilities.TryGetValue(quadgram, out double probability))
+                if (QuadgramProbabilities.TryGetValue(quadgram, out double probability))
                 {
                     quadgramProbabilities[quadgram] = probability;
                 }
@@ -62,8 +62,8 @@ namespace GeneticAlgorithm
 
             var textFitness = quadgramProbabilities.Average(quadgram => Math.Log10(quadgram.Value));
 
-             var score = Math.Abs(textFitness - NormalFitness) / NormalFitness;
-             return Math.Abs(score);
+            var score = Math.Abs(textFitness - NormalFitness) / NormalFitness;
+            return Math.Abs(score);
         }
     }
 }

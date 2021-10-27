@@ -64,5 +64,18 @@ namespace SecurityLabs
             }
             return newMatrix;
         }
+
+        public static string ToNormalizedPlaintext(this string text)
+        {
+            char minValue = 'A';
+            char maxValue = 'Z';
+
+            bool isEnglishLetter(char c) => c >= minValue && c <= maxValue;
+            return new string(text
+                .ToUpperInvariant()
+                .ToCharArray()
+                .Where(c => isEnglishLetter(c))
+                .ToArray());
+        }
     }
 }

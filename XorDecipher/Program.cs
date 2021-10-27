@@ -33,7 +33,7 @@ namespace XorDecipher
 
             input = inputEncoding switch
             {
-                InputEncoding.PlainText => input,
+                InputEncoding.PlainText => input.ToNormalizedPlaintext(),
                 InputEncoding.Base64 => Encoding.UTF8.GetString(Convert.FromBase64String(input)),
                 InputEncoding.Hex => Encoding.UTF8.GetString(Convert.FromHexString(input)),
                 _ => input
