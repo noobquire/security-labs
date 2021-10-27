@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using XorDecipher;
 
 namespace GeneticAlgorithm
 {
@@ -31,13 +32,12 @@ namespace GeneticAlgorithm
 
         public SubstitutionFitness(string cipherText)
         {
-            
             this.cipherText = cipherText;
         }
         public double Evaluate(IChromosome chromosome)
         {
             var abcChromosome = chromosome as SubstitutionChromosome;
-            var decryptedText = Decrypt(cipherText, abcChromosome);
+            var decryptedText = MonoSubstitutionCipher.Decrypt(abcChromosome.ToString(), cipherText);
             return QuadgramScore(decryptedText);
         }
 
@@ -60,26 +60,10 @@ namespace GeneticAlgorithm
                 }
             }
 
-            
             var textFitness = quadgramProbabilities.Average(quadgram => Math.Log10(quadgram.Value));
 
              var score = Math.Abs(textFitness - NormalFitness) / NormalFitness;
              return Math.Abs(score);
-        }
-
-        public static string Decrypt(string cipherText, SubstitutionChromosome key)
-        {
-            char[] chars = new char[cipherText.Length];
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-            for (int i = 0; i < cipherText.Length; i++)
-            {
-                var letterIndex = key.LetterIndex(cipherText[i]);
-                var letter = alphabet[letterIndex];
-                chars[i] = letter;
-            }
-
-            return new string(chars);
         }
     }
 }

@@ -8,6 +8,7 @@ using System;
 using SecurityLabs;
 using System.Timers;
 using System.Diagnostics;
+using XorDecipher;
 
 namespace GeneticAlgorithm
 {
@@ -26,15 +27,15 @@ namespace GeneticAlgorithm
 
             var ga = new Algorithm(population, fitness, selection, crossover, mutation)
             {
-                Termination = new FitnessThresholdTermination(0.5),
-                MutationProbability = 1
+                Termination = new GenerationNumberTermination(200),
+                MutationProbability = 0.45f
             };
 
             Console.WriteLine("GA running...");
             ga.Start();
 
             Console.WriteLine("Best solution found has {0} fitness.", ga.BestChromosome.Fitness);
-            Console.WriteLine(SubstitutionFitness.Decrypt(text, (SubstitutionChromosome)ga.BestChromosome));
+            Console.WriteLine(MonoSubstitutionCipher.Decrypt(((SubstitutionChromosome)ga.BestChromosome).ToString(), text));
         }
     }
 }

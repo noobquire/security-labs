@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XorDecipher;
 
 namespace GeneticAlgorithm
 {
@@ -18,11 +19,11 @@ namespace GeneticAlgorithm
         public SubstitutionChromosome() : base(ALPHABET_LENGTH)
         {
 
-            var chars = RandomizationProvider
+            var chars = "ekmflgdqvjntowyhxuspaibrcz".ToUpper().ToCharArray(); /*RandomizationProvider
                         .Current
                         .GetUniqueInts(ALPHABET_LENGTH, MIN_GENE_VALUE, MAX_GENE_VALUE + 1)
                         .Select(c => (char)c)
-                        .ToArray();
+                        .ToArray(); */
             originalValue = new string(chars);
             for (int i = 0; i < ALPHABET_LENGTH; i++)
             {
@@ -45,6 +46,11 @@ namespace GeneticAlgorithm
             return this.GetGenes()
                 .ToList()
                 .FindIndex(0, gene => (char)gene.Value == letter);
+        }
+
+        public override string ToString()
+        {
+            return new string(GetGenes().Select(gen => (char)gen.Value).ToArray());
         }
     }
 }
