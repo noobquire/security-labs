@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace XorDecipher
+namespace CipherUtils
 {
     public static class SingleXorCipher
     {

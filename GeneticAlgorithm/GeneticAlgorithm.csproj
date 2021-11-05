@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SecurityLabs\SecurityLabs.csproj" />
-    <ProjectReference Include="..\XorDecipher\XorDecipher.csproj" />
+    <ProjectReference Include="..\XorDecipher\CipherUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace XorDecipher
+﻿namespace CipherUtils
 {
     public static class MonoSubstitutionCipher
     {

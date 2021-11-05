@@ -72,5 +72,10 @@ namespace SecurityLabs
                          .Count(letter => letter == c)
                          / (double)text.Length);
         }
+
+        public static Dictionary<string, int[]> GetTrigramDistances(string text)
+        {
+            var trigrams = Enumerable.Range(0, text.Length - 2).Select(i => text.Skip(i).Take(3));
+        }
     }
 }

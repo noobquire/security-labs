@@ -1,4 +1,4 @@
-﻿namespace PseudoRandomDecoder
+﻿namespace CipherUtils
 {
     public class LcgRandom
     {

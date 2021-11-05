@@ -6,8 +6,6 @@ using GeneticSharp.Domain.Terminations;
 using Algorithm = GeneticSharp.Domain.GeneticAlgorithm;
 using System;
 using SecurityLabs;
-using System.Timers;
-using System.Diagnostics;
 using XorDecipher;
 
 namespace GeneticAlgorithm
