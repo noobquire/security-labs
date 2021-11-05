@@ -19,11 +19,12 @@ namespace GeneticAlgorithm
         public SubstitutionChromosome() : base(ALPHABET_LENGTH)
         {
 
-            var chars = "ekmflgdqvjntowyhxuspaibrcz".ToUpper().ToCharArray(); /*RandomizationProvider
+            var chars = RandomizationProvider
                         .Current
                         .GetUniqueInts(ALPHABET_LENGTH, MIN_GENE_VALUE, MAX_GENE_VALUE + 1)
                         .Select(c => (char)c)
-                        .ToArray(); */
+                        .ToArray();
+
             originalValue = new string(chars);
             for (int i = 0; i < ALPHABET_LENGTH; i++)
             {
@@ -39,13 +40,6 @@ namespace GeneticAlgorithm
         public override Gene GenerateGene(int geneIndex)
         {
             return new Gene((char)RandomizationProvider.Current.GetInt(MIN_GENE_VALUE, MAX_GENE_VALUE));
-        }
-
-        public int LetterIndex(char letter)
-        {
-            return this.GetGenes()
-                .ToList()
-                .FindIndex(0, gene => (char)gene.Value == letter);
         }
 
         public override string ToString()

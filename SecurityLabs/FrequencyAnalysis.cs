@@ -8,13 +8,13 @@ namespace SecurityLabs
         /// <summary>
         /// Relative frequency of each character appearing in English language.
         /// </summary>
-        public static Dictionary<char, double> LetterFrequencies = new Dictionary<char, double>()
+        public static Dictionary<char, double> EnglishLetterFrequencies = new Dictionary<char, double>()
         {
             ['a'] = 0.082,
             ['b'] = 0.015,
             ['c'] = 0.028,
             ['d'] = 0.043,
-            ['e'] = 0.13,
+            ['e'] = 0.14,
             ['f'] = 0.022,
             ['g'] = 0.02,
             ['h'] = 0.061,
@@ -48,7 +48,7 @@ namespace SecurityLabs
             double relativeFrequencyCorelation = 0;
             foreach (var charFrequency in GetCharFrequencies(text).OrderBy(c => c.Value))
             {
-                var letterOccurs = LetterFrequencies.TryGetValue(charFrequency.Key, out double letterFrequency);
+                var letterOccurs = EnglishLetterFrequencies.TryGetValue(charFrequency.Key, out double letterFrequency);
                 if (letterOccurs)
                 {
                     relativeFrequencyCorelation += letterFrequency * charFrequency.Value;
@@ -62,12 +62,15 @@ namespace SecurityLabs
         /// </summary>
         /// <param name="text">Text.</param>
         /// <returns>Dictionary with relative frequency for each character.</returns>
-        public static Dictionary<char, double> GetCharFrequencies(string text) => text
-                .ToUpperInvariant()
+        public static Dictionary<char, double> GetCharFrequencies(string text)
+        {
+            return text
+                .ToLower()
                 .Distinct()
                 .ToDictionary(c => c,
-                    c => text.ToUpperInvariant()
+                    c => 1000 * text
                          .Count(letter => letter == c)
-                         / (double) text.Length);
+                         / (double)text.Length);
+        }
     }
 }

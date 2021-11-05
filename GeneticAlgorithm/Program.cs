@@ -20,21 +20,22 @@ namespace GeneticAlgorithm
 
             var selection = new EliteSelection();
             var crossover = new PositionBasedCrossover();
-            var mutation = new DisplacementMutation();
+            var mutation = new TworsMutation();
             var fitness = new SubstitutionFitness(text);
             var chromosome = new SubstitutionChromosome();
-            var population = new Population(20, 200, chromosome);
+            var population = new Population(200, 250, chromosome);
 
             var ga = new Algorithm(population, fitness, selection, crossover, mutation)
             {
-                Termination = new GenerationNumberTermination(200),
-                MutationProbability = 0.45f
+                Termination = new GenerationNumberTermination(500),
+                CrossoverProbability = 0.45f,
+                MutationProbability = 0.8f
             };
 
             Console.WriteLine("GA running...");
             ga.Start();
 
-            Console.WriteLine("Best solution found has {0} fitness.", ga.BestChromosome.Fitness);
+            Console.WriteLine($"Best solution: {ga.BestChromosome} with {ga.BestChromosome.Fitness} fitness");
             Console.WriteLine(MonoSubstitutionCipher.Decrypt(((SubstitutionChromosome)ga.BestChromosome).ToString(), text));
         }
     }

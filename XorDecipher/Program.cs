@@ -34,8 +34,8 @@ namespace XorDecipher
             input = inputEncoding switch
             {
                 InputEncoding.PlainText => input.ToNormalizedPlaintext(),
-                InputEncoding.Base64 => Encoding.UTF8.GetString(Convert.FromBase64String(input)),
-                InputEncoding.Hex => Encoding.UTF8.GetString(Convert.FromHexString(input)),
+                InputEncoding.Base64 => Encoding.ASCII.GetString(Convert.FromBase64String(input)),
+                InputEncoding.Hex => Encoding.ASCII.GetString(Convert.FromHexString(input)),
                 _ => input
             };
 
@@ -83,24 +83,12 @@ namespace XorDecipher
 
             var bestKey = new string(columnsXorShifts.Select(shifts => shifts.First().Key).ToArray());
             Console.WriteLine($"Best key guess: {bestKey}");
-            var decodedText = XorEncodeDecode(input, bestKey);
-            Console.WriteLine($"Decoded text:\n { XorEncodeDecode(input, bestKey) }");
+            var decodedText = RepeatingXorCipher.EncryptDecrypt(bestKey, input);
+            Console.WriteLine($"Decoded text:\n {decodedText}");
             Console.WriteLine("\nWrote to output.txt");
-            File.WriteAllText("output.txt", XorEncodeDecode(input, bestKey));
+            File.WriteAllText("output.txt", decodedText);
         }
-
-        private static string XorEncodeDecode(string text, string key)
-        {
-            var result = new StringBuilder();
-            for (int i = 0; i < text.Length; i++)
-            {
-                result.Append((char)(text[i] ^ key[i % key.Length]));
-            }
-            return result.ToString();
-        }
-
-        
-
+     
         private static void IndexOfCoincidenceAnalysis(string input)
         {
             for (int i = 1; i < input.Length; i++)
@@ -119,11 +107,6 @@ namespace XorDecipher
             }
         }
 
-        private static string SingleByteXor(string input, char key)
-        {
-            return new string(input.ToCharArray().Select(c => (char)(c ^ key)).ToArray());
-        }
-
         private static Dictionary<char, string> GetAllXorShifts(string input)
         {
             char[] keys = Enumerable.Range(0, 128)
@@ -132,7 +115,11 @@ namespace XorDecipher
             Dictionary<char, string> output = new();
             foreach (var key in keys)
             {
-                output[key] = SingleByteXor(input, key);
+                if(!char.IsLetterOrDigit(key))
+                {
+                    continue;
+                }
+                output[key] = SingleXorCipher.EncryptDecrypt(key, input);
             }
             return output;
         }
