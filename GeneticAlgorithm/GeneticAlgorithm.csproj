@@ -14,10 +14,4 @@
     <ProjectReference Include="..\XorDecipher\CipherUtils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="english_quadgrams.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

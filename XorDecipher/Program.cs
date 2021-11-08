@@ -136,7 +136,7 @@ namespace CipherUtils
 
         private static void PrintCharFrequencies(string input)
         {
-            Dictionary<char, double> charFrequencies = FrequencyAnalysis.GetCharFrequencies(input);
+            var charFrequencies = FrequencyAnalysis.GetCharFrequencies(input);
             Console.WriteLine("Character frequencies: ");
             foreach (var pair in charFrequencies.OrderBy(kvp => kvp.Value))
             {

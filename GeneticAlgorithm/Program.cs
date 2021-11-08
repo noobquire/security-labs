@@ -6,7 +6,8 @@ using GeneticSharp.Domain.Terminations;
 using Algorithm = GeneticSharp.Domain.GeneticAlgorithm;
 using System;
 using SecurityLabs;
-using XorDecipher;
+using CipherUtils;
+using System.Diagnostics;
 
 namespace GeneticAlgorithm
 {
@@ -30,9 +31,12 @@ namespace GeneticAlgorithm
                 MutationProbability = 0.8f
             };
 
+            var sw = new Stopwatch();
             Console.WriteLine("GA running...");
+            sw.Start();
             ga.Start();
-
+            sw.Stop();
+            Console.WriteLine($"Time: {sw.ElapsedMilliseconds} ms");
             Console.WriteLine($"Best solution: {ga.BestChromosome} with {ga.BestChromosome.Fitness} fitness");
             Console.WriteLine(MonoSubstitutionCipher.Decrypt(((SubstitutionChromosome)ga.BestChromosome).ToString(), text));
         }
