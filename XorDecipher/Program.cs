@@ -76,7 +76,7 @@ namespace CipherUtils
             var columnsXorShifts = columns
                 .Select(col => GetAllXorShifts(col)
                 .OrderByDescending(shift =>
-                    FrequencyAnalysis.GetRelativeFrequencyCorelation(shift.Value)).ToArray())
+                    FrequencyAnalysis.GetLetterOverallFrequency(shift.Value)).ToArray())
                 .ToArray();
 
             var textXorShifts = new Dictionary<string, string>();
@@ -127,7 +127,7 @@ namespace CipherUtils
         private static void BruteforceSingleByteXor(string input)
         {
             var output = GetAllXorShifts(input)
-                .OrderByDescending(shift => FrequencyAnalysis.GetRelativeFrequencyCorelation(shift.Value));
+                .OrderByDescending(shift => FrequencyAnalysis.GetLetterOverallFrequency(shift.Value));
             var bestGuess = output.First();
             Console.WriteLine($"Best guess (key = {bestGuess.Key}): {bestGuess.Value}");
             File.WriteAllText("output.txt", string.Join('\n', output.Select(kvp => $"KEY {kvp.Key}: {kvp.Value}")));

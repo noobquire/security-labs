@@ -41,5 +41,15 @@ namespace GeneticAlgorithm
         {
             return new string(GetGenes().Select(gen => (char)gen.Value).ToArray());
         }
+
+        public void ReplaceWith(char plainChar, char cipherChar)
+        {
+            var shift = 0 - 'A';
+            var index = plainChar + shift;
+            char oldChar = (char)GetGene(index).Value;
+            var oldIndex = GetGenes().ToList().IndexOf(GetGenes().First(g => (char)g.Value == cipherChar));
+            ReplaceGene(index, new Gene(cipherChar));
+            ReplaceGene(oldIndex, new Gene(oldChar));
+        }
     }
 }

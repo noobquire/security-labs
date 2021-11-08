@@ -7,39 +7,40 @@ namespace SecurityLabs
     public static class FrequencyAnalysis
     {
         public static readonly Dictionary<string, double> QuadgramOccurences;
-
+        public static readonly Dictionary<char, int> LetterOccurencesInLab;
         /// <summary>
         /// Relative frequency of each character appearing in English language.
         /// </summary>
-        public static readonly Dictionary<char, decimal> EnglishLetterFrequencies = new Dictionary<char, decimal>()
+        /*public static readonly Dictionary<char, int> EnglishLetterOccurences = new Dictionary<char, int>()
         {
-            ['a'] = 0.082m,
-            ['b'] = 0.015m,
-            ['c'] = 0.028m,
-            ['d'] = 0.043m,
-            ['e'] = 0.14m,
-            ['f'] = 0.022m,
-            ['g'] = 0.02m,
-            ['h'] = 0.061m,
-            ['i'] = 0.07m,
-            ['j'] = 0.0015m,
-            ['k'] = 0.0077m,
-            ['l'] = 0.04m,
-            ['m'] = 0.024m,
-            ['n'] = 0.067m,
-            ['o'] = 0.075m,
-            ['p'] = 0.019m,
-            ['q'] = 0.00095m,
-            ['r'] = 0.06m,
-            ['s'] = 0.063m,
-            ['t'] = 0.091m,
-            ['u'] = 0.028m,
-            ['v'] = 0.0098m,
-            ['w'] = 0.024m,
-            ['x'] = 0.0015m,
-            ['y'] = 0.02m,
-            ['z'] = 0.00074m
+            ['e'] = 390395169,
+            ['t'] = 282039486,
+            ['a'] = 248362256,
+            ['o'] = 235661502,
+            ['i'] = 214822972,
+            ['n'] = 214319386,
+            ['s'] = 196844692,
+            ['h'] = 193607737,
+            ['r'] = 184990759,
+            ['d'] = 134044565,
+            ['l'] = 125951672,
+            ['u'] = 88219598,
+            ['c'] = 79962026,
+            ['m'] = 79502870,
+            ['f'] = 72967175,
+            ['w'] = 69069021,
+            ['g'] = 61549736,
+            ['y'] = 59010696,
+            ['p'] = 55746578,
+            ['b'] = 47673928,
+            ['v'] = 30476191,
+            ['k'] = 22969448,
+            ['x'] = 5574077,
+            ['j'] = 4507165,
+            ['q'] = 3649838,
+            ['z'] = 2456495
         };
+        */
 
         static FrequencyAnalysis()
         {
@@ -51,6 +52,16 @@ namespace SecurityLabs
                 double occurences = int.Parse(line.Split(' ')[1]);
                 QuadgramOccurences[quadgram] = occurences;
             }
+
+            var text = File.ReadAllText("lab1_plaintext.txt");
+            var letters = text
+                .ToLower()
+                .ToCharArray()
+                .Where(c => char.IsLetter(c));
+            LetterOccurencesInLab = letters
+                 .Distinct()
+                 .ToDictionary(l => l,
+                 l => letters.Count(letter => letter == l));
         }
 
         /// <summary>
@@ -58,12 +69,12 @@ namespace SecurityLabs
         /// </summary>
         /// <param name="text">Text.</param>
         /// <returns>Relative corelation.</returns>
-        public static decimal GetRelativeFrequencyCorelation(string text)
+        public static double GetLetterOverallFrequency(string text)
         {
-            decimal relativeFrequencyCorelation = 0;
+            double relativeFrequencyCorelation = 0;
             foreach (var charFrequency in GetCharFrequencies(text).OrderBy(c => c.Value))
             {
-                var letterOccurs = EnglishLetterFrequencies.TryGetValue(charFrequency.Key, out decimal letterFrequency);
+                var letterOccurs = LetterOccurencesInLab.TryGetValue(charFrequency.Key, out int letterFrequency);
                 if (letterOccurs)
                 {
                     relativeFrequencyCorelation += letterFrequency * charFrequency.Value;
@@ -77,7 +88,7 @@ namespace SecurityLabs
         /// </summary>
         /// <param name="text">Text.</param>
         /// <returns>Dictionary with relative frequency for each character.</returns>
-        public static Dictionary<char, decimal> GetCharFrequencies(string text)
+        public static Dictionary<char, double> GetCharFrequencies(string text)
         {
             return text
                 .ToLower()
@@ -85,7 +96,7 @@ namespace SecurityLabs
                 .ToDictionary(c => c,
                     c => 1000 * text
                          .Count(letter => letter == c)
-                         / (decimal)text.Length);
+                         / (double)text.Length);
         }
 
         public static Dictionary<string, int[]> GetNGramDistances(int n, string text)
@@ -111,7 +122,7 @@ namespace SecurityLabs
             return ngramDistances;
         }
 
-        public static double QuadgramScore(string text)
+        public static double GetQuadgramScore(string text)
         {
             var quadgrams = Enumerable
                 .Range(0, text.Length - 3)

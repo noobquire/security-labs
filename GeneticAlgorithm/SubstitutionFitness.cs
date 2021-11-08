@@ -18,7 +18,7 @@ namespace GeneticAlgorithm
         {
             var abcChromosome = chromosome as SubstitutionChromosome;
             var decryptedText = MonoSubstitutionCipher.Decrypt(abcChromosome.ToString(), cipherText);
-            return FrequencyAnalysis.QuadgramScore(decryptedText);
+            return FrequencyAnalysis.GetLetterOverallFrequency(decryptedText.ToLower());
         }
     }
 }
