@@ -13,48 +13,72 @@ namespace CipherUtils
         {
             PlainText,
             Base64,
-            Hex
+            Hex,
+            Binary
         }
 
         enum Operation
         {
             BruteforceSingleByteXor,
             BruteforceRepeatingXor,
-            GetCharFrequencies
+            GetCharFrequencies,
+            ShowText
         }
 
         static void Main()
         {
-            Console.WriteLine("Choose input encoding: \n0 - Plain text\n1 - Base64\n2 - HEX");
-            var inputEncoding = (InputEncoding)Utils.GetInt("encoding", 2);
-
-            Console.WriteLine($"Enter text to cipher/decipher: ");
-            string input = Console.ReadLine();
-
-            input = inputEncoding switch
+            while (true)
             {
-                InputEncoding.PlainText => input.ToNormalizedPlaintext(),
-                InputEncoding.Base64 => Encoding.ASCII.GetString(Convert.FromBase64String(input)),
-                InputEncoding.Hex => Encoding.ASCII.GetString(Convert.FromHexString(input)),
-                _ => input
-            };
 
-            Console.WriteLine("Choose operation: \n0 - Bruteforce single-byte XOR\n1 - Bruteforce repeating-key XOR\n2 - Show character frequencies");
-            var operation = (Operation)Utils.GetInt("operation", 2);
 
-            switch (operation)
-            {
-                case Operation.BruteforceSingleByteXor:
-                    BruteforceSingleByteXor(input);
-                    break;
-                case Operation.BruteforceRepeatingXor:
-                    BruteforceRepeatingXor(input);
-                    break;
-                case Operation.GetCharFrequencies:
-                    PrintCharFrequencies(input);
-                    break;
+                Console.WriteLine("Choose input encoding: \n0 - Plain text\n1 - Base64\n2 - HEX\n3 - Binary");
+                var inputEncoding = (InputEncoding)Utils.GetInt("encoding", 3);
+
+                Console.WriteLine($"Enter text to cipher/decipher: ");
+                Console.SetIn(new StreamReader(Console.OpenStandardInput(),
+                               Console.InputEncoding,
+                               false,
+                               bufferSize: 100000));
+                string input = Console.ReadLine();
+
+                input = inputEncoding switch
+                {
+                    InputEncoding.PlainText => input.ToNormalizedPlaintext(),
+                    InputEncoding.Base64 => Encoding.ASCII.GetString(Convert.FromBase64String(input)),
+                    InputEncoding.Hex => Encoding.ASCII.GetString(Convert.FromHexString(input)),
+                    InputEncoding.Binary => Encoding.ASCII.GetString(stringToBytes(input)),
+                    _ => input
+                };
+
+                byte[] stringToBytes(string binary) => binary.Chunk(8).Select(s => Convert.ToByte(s, 2)).ToArray();
+
+                Console.WriteLine("Choose operation: \n0 - Bruteforce single-byte XOR\n1 - Bruteforce repeating-key XOR\n2 - Show character frequencies\n3 - Show text");
+                var operation = (Operation)Utils.GetInt("operation", 3);
+
+                switch (operation)
+                {
+                    case Operation.BruteforceSingleByteXor:
+                        BruteforceSingleByteXor(input);
+                        break;
+                    case Operation.BruteforceRepeatingXor:
+                        BruteforceRepeatingXor(input);
+                        break;
+                    case Operation.GetCharFrequencies:
+                        PrintCharFrequencies(input);
+                        break;
+                    case Operation.ShowText:
+                        ShowText(input);
+                        break;
+                }
+
+                Console.WriteLine("Press any key for another operation, Ctrl + C to exit...");
+                Console.ReadKey();
             }
+        }
 
+        private static void ShowText(string input)
+        {
+            Console.WriteLine(input);
         }
 
         private static void BruteforceRepeatingXor(string input)

@@ -11,7 +11,7 @@ namespace SecurityLabs
         /// <summary>
         /// Relative frequency of each character appearing in English language.
         /// </summary>
-        /*public static readonly Dictionary<char, int> EnglishLetterOccurences = new Dictionary<char, int>()
+        public static readonly Dictionary<char, int> EnglishLetterOccurences = new Dictionary<char, int>()
         {
             ['e'] = 390395169,
             ['t'] = 282039486,
@@ -40,7 +40,6 @@ namespace SecurityLabs
             ['q'] = 3649838,
             ['z'] = 2456495
         };
-        */
 
         static FrequencyAnalysis()
         {
@@ -74,7 +73,7 @@ namespace SecurityLabs
             double relativeFrequencyCorelation = 0;
             foreach (var charFrequency in GetCharFrequencies(text).OrderBy(c => c.Value))
             {
-                var letterOccurs = LetterOccurencesInLab.TryGetValue(charFrequency.Key, out int letterFrequency);
+                var letterOccurs = EnglishLetterOccurences.TryGetValue(charFrequency.Key, out int letterFrequency);
                 if (letterOccurs)
                 {
                     relativeFrequencyCorelation += letterFrequency * charFrequency.Value;
