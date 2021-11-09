@@ -87,5 +87,18 @@ namespace SecurityLabs
                 minIndex = str.IndexOf(searchstring, minIndex + searchstring.Length);
             }
         }
+
+        public static string ChangeKeyChar(this string key, char plainChar, char cipherChar)
+        {
+            var shift = 0 - 'A';
+            var index = plainChar + shift;
+            char oldChar = key[index];
+            var oldIndex = key.IndexOf(key.First(c => c == cipherChar));
+            var newKeyArr = key.ToCharArray();
+            newKeyArr[index] = cipherChar;
+            newKeyArr[oldIndex] = oldChar;
+            var newKey = new string(newKeyArr);
+            return newKey;
+        }
     }
 }
