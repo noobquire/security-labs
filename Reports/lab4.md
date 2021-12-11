@@ -5,15 +5,15 @@ TBD
 
 # Підбір чужих хешів паролів за допомогою hashcat
 
-Спробуємо підібрати паролі з списку 100 тис. md5 хешів слабких паролей.
-Використаємо wordlist атаку з 10 мільйонами найуживаніших паролей (https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt)
+Спробуємо підібрати паролі з списку 100 тис. md5 хешів слабких паролей.  
+Використаємо wordlist атаку з 10 мільйонами найуживаніших паролей (https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt)  
 ```
 .\hashcat64.exe -a 0 -m 0 weakHashes.csv .\10-million-password-list-top-1000000.txt -o brokenWeakHashes.txt
 ```
-Результат виконання:
+Результат виконання:  
 ![image](https://user-images.githubusercontent.com/20458905/145692454-d330aabb-fd77-48dc-8c24-6f28eefe3055.png)
 
-У результаті вдалося отримати 79474/100000 паролів
+У результаті вдалося отримати 79474/100000 паролів  
 
 # Брутфорс посилання на наступну лабу
 
