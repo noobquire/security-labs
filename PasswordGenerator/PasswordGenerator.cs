@@ -31,26 +31,26 @@ namespace PasswordGenerator
                 switch (rnd.Next(0, 11))
                 {
                     case 1:
-                        result.Add(await CreateCommonPassword());
+                        result.Add(await Task.Run(() => CreateCommonPassword()));
                         break;
                     case 2:
-                        result.Add(await CreateStrongPassword());
+                        result.Add(await Task.Run(() => CreateStrongPassword()));
                         break;
                     default:
-                        result.Add(await CreateUsualPassword());
+                        result.Add(await Task.Run(() => CreateUsualPassword()));
                         break;
-                };
+                }
             }
 
             return result;
         }
 
-        private async Task<string> CreateCommonPassword()
+        private string CreateCommonPassword()
         {
             return Resources.CommonPasswords[rnd.Next(0, Resources.CommonPasswords.Length)];
         }
 
-        private async Task<string> CreateUsualPassword()
+        private string CreateUsualPassword()
         {
             var length = rnd.Next(5, 15);
             StringBuilder res = new StringBuilder();
@@ -61,7 +61,7 @@ namespace PasswordGenerator
             return res.ToString();
         }
 
-        private async Task<string> CreateStrongPassword()
+        private string CreateStrongPassword()
         {
             var length = rnd.Next(20, 31);
             var numberOfNonAlphanumericCharacters = rnd.Next(5, length - 15);
