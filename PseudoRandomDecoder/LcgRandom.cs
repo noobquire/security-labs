@@ -17,5 +17,10 @@
             _last = (a * _last + c) % Modulo;
             return (int)_last;
         }
+
+        public static int Predict(int[] lcgValues)
+        {
+            return 42;
+        }
     }
 }
