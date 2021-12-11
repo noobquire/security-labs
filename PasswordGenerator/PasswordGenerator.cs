@@ -8,9 +8,9 @@ namespace PasswordGenerator
 {
     internal class PasswordGenerator
     {
-        private readonly Random rnd = new Random();
+        private readonly Random rnd = new();
         private static readonly char[] Punctuations = "!@#$%^&*()_-+=[{]};:>|./?".ToCharArray();
-        const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        private static readonly string Numbers = "1234567890";
 
         internal Task<List<string>> GenerateRecordsAsync(int count)
         {
@@ -52,13 +52,57 @@ namespace PasswordGenerator
 
         private string CreateUsualPassword()
         {
-            var length = rnd.Next(5, 15);
-            StringBuilder res = new StringBuilder();
-            while (0 < length--)
+            var commonWord = Resources.CommonWords[rnd.Next(0, Resources.CommonWords.Length)];
+            return ProcessCommonPassword(commonWord);
+
+            string ProcessCommonPassword(string word)
             {
-                res.Append(valid[rnd.Next(valid.Length)]);
+                if(rnd.Next(0, 20) > 17)
+                {
+                    word += Resources.CommonWords[rnd.Next(0, Resources.CommonWords.Length)];
+                }
+
+                var wordAsCharArray = word.ToCharArray();
+                for (int i = 0; i < wordAsCharArray.Length; i++)
+                {
+                    switch (word[i])
+                    {
+                        case 'l':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '1' : 'l';
+                            break;
+                        case 'o':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '0' : 'o';
+                            break;
+                        case 'e':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '3' : 'e';
+                            break;
+                        case 'g':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '9' : 'g';
+                            break;
+                        case 't':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '2' : 't';
+                            break;
+                        case 'f':
+                            wordAsCharArray[i] = rnd.Next(0, 3) > 1 ? '4' : 'f';
+                            break;
+                    }
+
+                    if (char.IsLetter(wordAsCharArray[i]) && char.IsLower(wordAsCharArray[i]) && rnd.Next(0, 10) > 7)
+                    {
+                        wordAsCharArray[i] = char.ToUpper(wordAsCharArray[i]);
+                    }
+                }
+
+                StringBuilder result = new(new string(wordAsCharArray));
+                var countOfNumbersAfterPassword = rnd.Next(0, 6);
+                for (int i = 0; i < countOfNumbersAfterPassword; i++)
+                {
+                    result.Append(Numbers[rnd.Next(0, Numbers.Length)]);
+                }
+
+                return result.ToString();
             }
-            return res.ToString();
+
         }
 
         private string CreateStrongPassword()

@@ -12,14 +12,15 @@ namespace PasswordGenerator
 {
     class Program
     {
-        private const int recordsCount = 100000;
+        private const int recordsCount = 100;
         static async Task Main(string[] args)
         {
             var passwordGenerator = new PasswordGenerator();
             var records = await passwordGenerator.GenerateRecordsAsync(recordsCount);
             PrintResult(records);
-            SaveToCsv(records, "WeakPasswords", SHA1.Create());
-            //SaveToCsv(records, "StrongPasswords");
+            SaveToCsv(await Task.Run(() => RunHashSha1(records)), "WeakPasswords");
+            SaveToCsv(await Task.Run(() => RunHashArgon2i(records)), "StrongPasswords");
+            Console.WriteLine("Done.");
             Console.ReadKey();
         }
 
@@ -31,7 +32,7 @@ namespace PasswordGenerator
             }
         }
 
-        private static void SaveToCsv(List<string> records, string fileName, HashAlgorithm hashAlgorithm)
+        private static void SaveToCsv(List<string> records, string fileName)
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             var finalPath = Path.Combine(basePath, fileName + ".csv");
@@ -39,38 +40,49 @@ namespace PasswordGenerator
 
             foreach (var r in records)
             {
-                var hash = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(r));
-                sw.WriteLine(string.Concat(hash.Select(b => b.ToString("x2"))));
+                sw.WriteLine(r);
             }
         }
 
-        public void Run()
+        private static List<string> RunHashSha1(List<string> records)
         {
-            var password = "Hello World!";
-            var stopwatch = Stopwatch.StartNew();
+            var result = new List<string>();
 
-            Console.WriteLine($"Creating hash for password '{ password }'.");
+            foreach (var record in records)
+            {
+                var hash = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(record));
+                result.Add(string.Concat(hash.Select(b => b.ToString("x2"))));
+            }
 
-            var salt = CreateSalt();
-            Console.WriteLine($"Using salt '{ Convert.ToBase64String(salt) }'.");
-
-            var hash = HashPassword(password, salt);
-            Console.WriteLine($"Hash is '{ Convert.ToBase64String(hash) }'.");
-
-            stopwatch.Stop();
-            Console.WriteLine($"Process took { stopwatch.ElapsedMilliseconds / 1024.0 } s");
-
-            stopwatch = Stopwatch.StartNew();
-            Console.WriteLine($"Verifying hash...");
-
-            var success = VerifyHash(password, salt, hash);
-            Console.WriteLine(success ? "Success!" : "Failure!");
-
-            stopwatch.Stop();
-            Console.WriteLine($"Process took { stopwatch.ElapsedMilliseconds / 1024.0 } s");
+            return result;
         }
 
-        private byte[] CreateSalt()
+        private static List<string> RunHashArgon2i(List<string> records)
+        {
+            var result = new List<string>();
+
+            foreach (var record in records)
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                Console.WriteLine($"Creating hash for password '{ record }'.");
+
+                var salt = CreateSalt();
+                Console.WriteLine($"Using salt '{ Convert.ToBase64String(salt) }'.");
+
+                var hash = HashPassword(record, salt);
+                Console.WriteLine($"Hash is '{ Convert.ToBase64String(hash) }'.");
+
+                stopwatch.Stop();
+                Console.WriteLine($"Process took { stopwatch.ElapsedMilliseconds / 1024.0 } s");
+
+                result.Add($"Hash: {Convert.ToBase64String(hash)}, salt: {Convert.ToBase64String(salt)}");
+            }
+
+            return result;
+        }
+
+        private static byte[] CreateSalt()
         {
             var buffer = new byte[16];
             var rng = new RNGCryptoServiceProvider();
@@ -78,7 +90,7 @@ namespace PasswordGenerator
             return buffer;
         }
 
-        private byte[] HashPassword(string password, byte[] salt)
+        private static byte[] HashPassword(string password, byte[] salt)
         {
             var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password));
 
@@ -90,7 +102,7 @@ namespace PasswordGenerator
             return argon2.GetBytes(16);
         }
 
-        private bool VerifyHash(string password, byte[] salt, byte[] hash)
+        private static bool VerifyHash(string password, byte[] salt, byte[] hash)
         {
             var newHash = HashPassword(password, salt);
             return hash.SequenceEqual(newHash);
