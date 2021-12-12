@@ -1,7 +1,4 @@
-﻿using SecurityLabs;
-using System.Text;
-
-string[] text = new string[]
+﻿string[] text = new string[]
 {
     "280dc9e47f3352c307f6d894ee8d534313429a79c1d8a6021f8a8eabca919cfb685a0d468973625e757490daa981ea6b",
     "3a0a9cab782b4f8603eac28aadde1151005fd46a859df21d12c38eaa858596bf2548000e883d72117466c5c3a580f66b",
