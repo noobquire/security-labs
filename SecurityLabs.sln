@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneticAlgorithm", "Genetic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalsaDecoder", "SalsaDecoder\SalsaDecoder.csproj", "{517870EF-7C15-4A44-813C-678BE60D561A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordGenerator", "PasswordGenerator\PasswordGenerator.csproj", "{B9472535-4D73-4CDE-974D-C326AF92DEFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordGenerator", "PasswordGenerator\PasswordGenerator.csproj", "{B9472535-4D73-4CDE-974D-C326AF92DEFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +37,14 @@ Global
 		{B1086054-BE29-4062-A825-D009D89E9869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1086054-BE29-4062-A825-D009D89E9869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1086054-BE29-4062-A825-D009D89E9869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{517870EF-7C15-4A44-813C-678BE60D561A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{517870EF-7C15-4A44-813C-678BE60D561A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{517870EF-7C15-4A44-813C-678BE60D561A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{517870EF-7C15-4A44-813C-678BE60D561A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
