@@ -3,7 +3,7 @@
 ![image](https://user-images.githubusercontent.com/20458905/141698080-0b6608b8-a8bc-406c-8625-0c74dba5f95f.png)
 ![image](https://user-images.githubusercontent.com/20458905/141698096-8e14bb5c-9e2f-453f-b950-2e7766d4fc86.png)
 ![image](https://user-images.githubusercontent.com/20458905/141698108-f08c4a4e-4d11-4651-8440-b0f232a898f6.png)
-Завантажимо файл сертифіката та переглянемо деталі. Бачимо, що ZeroSSL використовує RSA шифрування з алгоритмом хешування SHA-384:
+Завантажимо файл сертифіката та переглянемо деталі. Бачимо, що ZeroSSL використовує RSA шифрування з алгоритмом хешування SHA-384, що э безпечним за сучасними стандартами:
 
 ![image](https://user-images.githubusercontent.com/20458905/141698150-b7f128fe-ed8a-4b48-9a7b-1c56d638f867.png)
 
