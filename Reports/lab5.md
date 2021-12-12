@@ -31,3 +31,7 @@ builder.Services.AddScoped<IPasswordHasher<IdentityUser>, Argon2PasswordHasher<I
 
 Сторінка, яка доступна тільки авторизованим користувачам:  
 ![image](https://user-images.githubusercontent.com/20458905/145714310-e4463e27-4db8-48eb-a20c-b9e902388961.png)
+
+Вигляд захешованих паролів у базі даних:  
+![image](https://user-images.githubusercontent.com/20458905/145714421-0ab8557f-6875-47a8-b28a-91a5f41da246.png)
+
