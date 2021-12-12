@@ -1,5 +1,5 @@
 # Lab 1. Intro
-1. Щоб отримати перше завдання з бінарного коду, сконвертуємо його у ASCII символи за допомогою утиліти CipherUtils:
+1. Щоб отримати перше завдання, сконвертуємо бінарний код у ASCII символи за допомогою утиліти CipherUtils:
 
 ![image](https://user-images.githubusercontent.com/20458905/140978184-bad3f9dd-ee59-4ed6-b80e-894fe3f0a8af.png)
 
