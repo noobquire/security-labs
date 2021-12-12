@@ -31,38 +31,80 @@ namespace PseudoRandomDecoder
                 _ => 1
             };
 
-            var values = new List<int>();
-            for (int i = 0; i < numberOfValues; i++)
+            var values = mode switch
             {
-                var value = await GetValue(accountId, mode);
-                Console.WriteLine(value);
-                values.Add(value);
-            }
+                Mode.Lcg => await GetCorrectLcgValues(numberOfValues, accountId, mode),
+                Mode.Mt => await GetCorrectMtValues(numberOfValues, accountId, mode),
+                Mode.BetterMt => await GetCorrectMtValues(numberOfValues, accountId, mode),
+                _ => default
+            };
 
             var predictedValue = mode switch
             {
-                Mode.Lcg => LcgRandom.Predict(values.ToArray()),
+                Mode.Lcg => LcgRandom.Predict(values),
                 Mode.Mt => MtRandom.BruteforceSeed(values.First()),
-                Mode.BetterMt => MtRandom.Predict(values.ToArray()),
+                Mode.BetterMt => MtRandom.PredictHardSeededMt(values),
                 _ => 42
             };
 
-            Console.WriteLine($"predicted next value: {predictedValue}");
+            Console.WriteLine($"Predicted next value: {predictedValue}");
             var response = await TryValue(predictedValue, accountId, mode);
-            if (response.realNumber == predictedValue)
+            if (response.RealNumber == predictedValue)
             {
                 Console.WriteLine("Cracked successfully!");
+                Console.WriteLine(response.Message);
             }
             else
             {
                 Console.WriteLine("Failed to crack :(");
             }
+
+            Console.ReadKey();
         }
 
-        private static async Task<int> GetValue(string accountId, Mode mode)
+        private static async Task<long[]> GetCorrectLcgValues(int numberOfValues, string accountId, Mode mode)
+        {
+            var values = new long[numberOfValues];
+            long helper;
+
+            do
+            {
+                for (int i = 0; i < numberOfValues; i++)
+                {
+                    var value = await GetValue(accountId, mode);
+                    Console.WriteLine(value);
+                    values[i] = value;
+                }
+
+            } while (!LcgRandom.TryModulusInverse(values[0] - values[1], (long)Math.Pow(2, 32), out helper));
+
+            return values;
+        }
+
+        private static async Task<long[]> GetCorrectMtValues(int numberOfValues, string accountId, Mode mode)
+        {
+            var values = new long[numberOfValues];
+
+            for (int i = 0; i < numberOfValues; i++)
+            {
+                var value = await GetValue(accountId, mode);
+                Console.WriteLine(value);
+                values[i] = value;
+            }
+
+            return values;
+        }
+
+        private static async Task<long> GetValue(string accountId, Mode mode)
         {
             var response = await TryValue(1, accountId, mode);
-            return response.realNumber;
+
+            while (response is null)
+            {
+                response = await TryValue(1, accountId, mode);
+            }
+
+            return response.RealNumber;
         }
 
         /// <summary>
@@ -71,7 +113,7 @@ namespace PseudoRandomDecoder
         /// <returns>Account id</returns>
         private static async Task<string> CreateAccount()
         {
-            int id = new Random().Next(0, 100000);
+            var id = Guid.NewGuid();
             while (true)
             {
                 var url = $"http://95.217.177.249/casino/createacc?id={id}";
@@ -82,12 +124,12 @@ namespace PseudoRandomDecoder
                 {
                     var responseString = await response.Content.ReadAsStringAsync();
                     var account = JsonSerializer.Deserialize<Account>(responseString);
-                    Console.WriteLine($"created account with id = {account.id}");
-                    return account.id;
+                    Console.WriteLine($"Created account with id = {account.Id}");
+                    return account.Id;
                 }
 
-                Console.WriteLine($"account {id} already exists, retrying");
-                id = new Random().Next(0, 100000);
+                Console.WriteLine($"Account {id} already exists, retrying");
+                id = Guid.NewGuid();
             }
         }
 

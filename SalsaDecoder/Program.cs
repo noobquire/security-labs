@@ -1,4 +1,6 @@
-﻿using SecurityLabs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 string[] text = new string[]
@@ -44,8 +46,7 @@ static byte[] XorBytes(byte[] text, byte[] key)
 static double GetTextFitness(string text)
 {
     double goodCharsCount = text.ToCharArray()
-        .Where(c => char.IsLetter(c) || char.IsWhiteSpace(c) || char.IsPunctuation(c))
-        .Count();
+        .Count(c => char.IsLetter(c) || char.IsWhiteSpace(c) || char.IsPunctuation(c));
 
     return (goodCharsCount / text.Length) * 100;
 }
