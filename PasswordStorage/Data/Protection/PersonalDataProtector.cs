@@ -1,13 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
-
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 
-namespace AspNetCoreIdentityEncryption
+namespace PasswordStorage.Data.Protection
 {
     public class PersonalDataProtector : IPersonalDataProtector
     {

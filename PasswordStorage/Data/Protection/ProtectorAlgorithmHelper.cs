@@ -1,8 +1,6 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
-
-namespace AspNetCoreIdentityEncryption
+namespace PasswordStorage.Data.Protection
 {
     public enum ProtectorAlgorithm
     {

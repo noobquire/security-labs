@@ -1,8 +1,7 @@
-using AspNetCoreIdentityEncryption;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PasswordStorage.Data;
+using PasswordStorage.Data.Protection;
 using ScottBrady91.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-
-using Microsoft.AspNetCore.Hosting;
+﻿using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 
-namespace AspNetCoreIdentityEncryption
+namespace PasswordStorage.Data.Protection
 {
     public class KeyRing : ILookupProtectorKeyRing
     {
