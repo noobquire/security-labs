@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31717.71
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityLabs", "SecurityLabs\SecurityLabs.csproj", "{04962F61-8548-4EA5-81AC-0E8EAF9FAFFE}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneticAlgorithm", "GeneticAlgorithm\GeneticAlgorithm.csproj", "{B1086054-BE29-4062-A825-D009D89E9869}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalsaDecoder", "SalsaDecoder\SalsaDecoder.csproj", "{517870EF-7C15-4A44-813C-678BE60D561A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordGenerator", "PasswordGenerator\PasswordGenerator.csproj", "{B9472535-4D73-4CDE-974D-C326AF92DEFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordStorage", "PasswordStorage\PasswordStorage.csproj", "{D86A2831-40A2-4DBB-B731-E1DDF8B972C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{517870EF-7C15-4A44-813C-678BE60D561A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517870EF-7C15-4A44-813C-678BE60D561A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517870EF-7C15-4A44-813C-678BE60D561A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9472535-4D73-4CDE-974D-C326AF92DEFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86A2831-40A2-4DBB-B731-E1DDF8B972C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86A2831-40A2-4DBB-B731-E1DDF8B972C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86A2831-40A2-4DBB-B731-E1DDF8B972C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86A2831-40A2-4DBB-B731-E1DDF8B972C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
