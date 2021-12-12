@@ -1,3 +1,5 @@
+using AspNetCoreIdentityEncryption;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PasswordStorage.Data;
@@ -11,10 +13,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+        options.Stores.ProtectPersonalData = true;
+        options.Stores.MaxLengthForKeys = 128;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IPersonalDataProtector, PersonalDataProtector>();
+builder.Services.AddScoped<ILookupProtectorKeyRing, KeyRing>();
+builder.Services.AddScoped<ILookupProtector, LookupProtector>();
+
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IPasswordHasher<IdentityUser>, Argon2PasswordHasher<IdentityUser>>();
+builder.Services.AddDataProtection();
 
 var app = builder.Build();
 
