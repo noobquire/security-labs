@@ -39,7 +39,7 @@ namespace PseudoRandomDecoder
                 _ => default
             };
 
-            var predictedValue = mode switch
+            long predictedValue = mode switch
             {
                 Mode.Lcg => LcgRandom.Predict(values),
                 Mode.Mt => MtRandom.BruteforceSeed(values.First()),
@@ -98,12 +98,6 @@ namespace PseudoRandomDecoder
         private static async Task<long> GetValue(string accountId, Mode mode)
         {
             var response = await TryValue(1, accountId, mode);
-
-            while (response is null)
-            {
-                response = await TryValue(1, accountId, mode);
-            }
-
             return response.RealNumber;
         }
 
@@ -133,7 +127,7 @@ namespace PseudoRandomDecoder
             }
         }
 
-        private static async Task<CasinoResponse> TryValue(int value, string accountId, Mode mode)
+        private static async Task<CasinoResponse> TryValue(long value, string accountId, Mode mode)
         {
             var builder = new UriBuilder($"http://95.217.177.249/casino/play{mode}/");
             builder.Port = -1;

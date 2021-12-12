@@ -61,14 +61,14 @@ namespace PseudoRandomDecoder
             return (int)mtInstance.GetValue();
         }
 
-        public static int PredictHardSeededMt(long[] mtValues)
+        public static long PredictHardSeededMt(long[] mtValues)
         {
             var mtGenerator = new MtRandom
             {
                 List = RecreateStates(mtValues)
             };
 
-            return (int)mtGenerator.GetValue();
+            return mtGenerator.GetValue();
         }
 
         public uint GetValue()
